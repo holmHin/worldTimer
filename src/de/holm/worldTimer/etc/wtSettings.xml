@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wtSettings>
+	<worldPath>/home/holm/dump/worldTimer/worldMap3.jpg</worldPath>
+	<BGColor>#191919</BGColor>
+	<LableColor>#549BA7</LableColor>
+	<effect lableGlow="0"/>
+	<infoBox visible="true"/>
+	<FinishColor>f20000</FinishColor>
+	<title>Test Run</title>
+	<dateTo>2016-12-27</dateTo>
+	<timeTo>19:00:00</timeTo>
+	<minutesOfActive from="59" to="0" />
+	<minutesOfFinish from="0" to="1440" />
+	<worldBounds>
+		<greenwich x="2000" y="412" />
+		<hawai x="273" y="778" />
+		<auckland x="3965" y="1422" />
+	</worldBounds>
+	<locations>
+		<location name="Hamburg">
+			<position lat="5333" long="1000" />
+			<mode timeMode="0" isHome="1" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="CET" />
+		</location>
+		<location name="Hong Kong">
+			<position lat="2239" long="11418" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Hongkong" />
+		</location>
+		<location name="Tokyo">
+			<position lat="3573" long="13973" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Japan" />
+		</location>
+		<location name="New York, NY">
+			<position lat="4072" long="-7381" />
+			<mode timeMode="0" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="America/New_York" />
+		</location>
+		<location name="Mumbai">
+			<position lat="1907" long="7287" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="GMT+6:30" />
+		</location>
+		<location name="Rio De Janeiro">
+			<position lat="-2254" long="-4312" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="America/Sao_Paulo" />
+		</location>
+		<location name="Sydney">
+			<position lat="-3351" long="15112" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Australia/Sydney" />
+		</location>
+		<location name="Lissabon">
+			<position lat="3843" long="-910" />
+			<mode timeMode="0" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Europe/London" />
+		</location>
+		<location name="Los Angeles, CA">
+			<position lat="3430" long="-11815" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="America/Los_Angeles" />
+		</location>
+		<location name="Istanbul">
+			<position lat="4110" long="2858" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Europe/Istanbul" />
+		</location>
+		<location name="Moskow">
+			<position lat="5545" long="3737" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Europe/Moscow" />
+		</location>
+		<location name="Nairobi">
+			<position lat="119" long="3649" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Africa/Nairobi" />
+		</location>
+		<location name="Singapore">
+			<position lat="100" long="10400" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Asia/Singapore" />
+		</location>
+		<location name="Cape Town">
+			<position lat="-3355" long="1825" />
+			<mode timeMode="1" isHome="0" />
+			<color>
+				<lable hex="#ffc100" />
+				<circle hex="#DF6500" />
+				<active hex="#ff0606" />
+				<finish hex="#f20000" />
+			</color>
+			<time zone="Africa/Johannesburg" />
+		</location>
+	</locations>
+</wtSettings>

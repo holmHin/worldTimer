@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.jdom2.JDOMException;
 
 import de.holm.worldTimer.items.Settings;
+import de.holm.worldTimer.runnable.GgLoader;
 import de.holm.worldTimer.runnable.WorldUpdater;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -114,6 +115,11 @@ public class WTMainController {
 		updateTimer = new Timer();
 		updateTimer.schedule(wupd, 1000, 100);
 		
+		
+		// Reload bgImage every 5 seconds
+		GgLoader bgLoader = new GgLoader(drawer);
+		Timer bgLoadTimer = new Timer();
+		bgLoadTimer.schedule(bgLoader, 1000,4000);
 		
 	}
 	

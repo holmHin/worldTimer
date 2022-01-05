@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import de.holm.worldTimer.items.Location;
+import de.holm.worldTimer.items.Message;
 import de.holm.worldTimer.items.Settings;
 import de.holm.worldTimer.items.clockModus;
 import javafx.scene.canvas.Canvas;
@@ -87,7 +88,6 @@ public class WTDrawer {
 		GraphicsContext gc = wtCanvas.getGraphicsContext2D();
 
 		// Draw image to fit!
-
 		gc.drawImage(this.wtImg, 0, 0, this.aPane.getWidth(), this.aPane.getHeight());
 
 	}
@@ -103,6 +103,7 @@ public class WTDrawer {
 		gc.setFill(c);
 
 		// Draw current Time
+		if(glow>0)
 		gc.setEffect(new Glow(glow));
 		Font theFont = Font.font("Courier New", FontWeight.BOLD, 22);
 		gc.setFont(theFont);
@@ -111,7 +112,7 @@ public class WTDrawer {
 
 		// Draw Title
 		theFont = Font.font("Arial", FontWeight.BOLD, 25);
-		gc.setFont(theFont);
+		gc.setFont(theFont);  
 		gc.fillText(Settings.getTitle(), 25, 31);
 		gc.setEffect(null);
 
@@ -120,7 +121,10 @@ public class WTDrawer {
 			this.drawCity(myLoc);
 		}
 		
-		this.drawInfoBox();
+		
+		//Draw infoBox
+		if(Settings.isShowBox())
+			this.drawInfoBox();
 
 		// Animation calculation
 		this.calcZoomer();
@@ -296,7 +300,8 @@ public class WTDrawer {
 			// TODO: handle exception
 		}
 		
-		gc.setEffect(new Glow(50));
+		if(glow>0)
+			gc.setEffect(new Glow(glow));
 		gc.setStroke(circleColor);
 		gc.strokeOval(this.updatePositionXtowindow((int) getXfromLongitude(loc.getLon())),
 				this.updatePositionYtowindow((int) this.getYFromLatitude(loc.getLat())), 5, 5);
@@ -347,7 +352,8 @@ public class WTDrawer {
 
 		int fSize = (loc.isHome() ? 13 : 13);
 		Font lableFont = Font.font("Arial", FontWeight.BOLD, fSize);
-		gc.setEffect(new Glow(glow));
+		if(glow>0)
+			gc.setEffect(new Glow(glow));
 		gc.setFont(lableFont);
 		gc.setFill(lableColor);
 		gc.fillText(loc.getName(), this.updatePositionXtowindow((int) getXfromLongitude(loc.getLon())) + 6,
@@ -372,7 +378,7 @@ public class WTDrawer {
 		Color lableColor;
 		try {
 			if (loc.isFinish()) {
-				lableColor = Color.web(Settings.getFinishColor(), this.alphaFinish);
+				lableColor = Color.web(loc.getColorFinish(), this.alphaFinish);
 			} else
 				lableColor = Color.web(loc.getColorLable(), 0.95);
 		} catch (Exception e) {
@@ -381,107 +387,25 @@ public class WTDrawer {
 
 		}
 
-		// Calculate current time
-		TimeZone tz;
-		try {
-			tz = TimeZone.getTimeZone(loc.getTimeZoneCode());
-		} catch (Exception e) {
-			// TODO: handle exception
-			tz = TimeZone.getDefault();
-		}
-		// Get current timeZone;
-		Calendar now = Calendar.getInstance();
-		TimeZone tzDefault = now.getTimeZone();
-
+		
 		Font lableFont = Font.font("Arial", FontWeight.BOLD, 15);
-
-		// calculate locale Time
-		Date locDate = new Date();
-		Calendar localeCal = new GregorianCalendar();
-		localeCal.setTimeZone(tz);
-
+		
 		String timeDrawer = "";
 
-		SimpleDateFormat sf = new SimpleDateFormat("HH:mm:ss");
-		sf.setTimeZone(tz);
-		// timeDrawer =
-
-
-		// Calculate Timedifference to Midnight if finish is midnight!
-		Calendar midNigth = Calendar.getInstance();
-		midNigth.set(Calendar.HOUR_OF_DAY, 0);
-		midNigth.set(Calendar.MINUTE, 0);
-		midNigth.set(Calendar.SECOND, 0);
-		midNigth.set(Calendar.MILLISECOND, 0);
-
-		// calculate TimeZone Offset and minutes to midnight
-		Date midTime = Settings.getTimerDate();
-		Long difference = ((locDate.getTime() + tz.getOffset(locDate.getTime()) - midTime.getTime()) / 1000) / 60;
-		difference = difference - (tzDefault.getOffset(locDate.getTime()) / 1000 / 60);
-		
-		// Check if Location need to be activated!
-		int minsPriorActive = Settings.getActiveStart() * (-1);
-		if (difference > minsPriorActive && difference < Settings.getActiveEnd()) {
-			loc.setActive(true);
-			if(loc.isActive()==false){
-				//Message that location is activated!
-				System.out.println(loc.getName()+" was activated!");
-			}
-		} else
-			loc.setActive(false);
-
-		// Check if Location is Finished!
-		int minsPriorFinish = Settings.getFinishStart() * (-1);
-		if (difference >= minsPriorFinish && difference < Settings.getFinishEnd() ) {
-			if(loc.isFinish()==false){
-				//Message that this location will be set to finished
-				System.out.println(loc.getName()+" reached the due date!");
-			}
-			loc.setFinish(true);
-		} else
-			loc.setFinish(false);
-
-		
 		//Mode
 		if(loc.getMode()==clockModus.Time){
-			timeDrawer = sf.format(locDate.getTime());
+			timeDrawer = loc.getCurrentTime("HH:mm:ss");
 		} else if(loc.getMode()==clockModus.Countdown){
-			Long timeToEnd = ((locDate.getTime() + tz.getOffset(locDate.getTime()) - midTime.getTime()) );
-			timeToEnd = timeToEnd - (tzDefault.getOffset(locDate.getTime()) );
-			
-			if(timeToEnd < 0){
-				timeToEnd = timeToEnd * -1;
-			}
-			
-			System.out.println(loc.getName()+" time to finish "+timeToEnd);
-			
-			final TimeUnit convert = TimeUnit.MILLISECONDS;
-			long daysLeft =  convert.toDays(timeToEnd);
-			timeToEnd -= DAYS.toMillis(daysLeft);
-			long hoursLeft = convert.toHours(timeToEnd);
-			timeToEnd -= HOURS.toMillis(hoursLeft);
-			long minsLeft = convert.toMinutes(timeToEnd);
-			timeToEnd -= MINUTES.toMillis(minsLeft);
-			long secondsLeft = convert.toSeconds(timeToEnd);
-			timeToEnd -= SECONDS.toMillis(timeToEnd);
-			
-			
-		//	System.out.println(loc.getName()+" time "+locDate.getTime()+ "/ finish time: "+Settings.getTimerDate().getTime());
-		// System.out.println(loc.getName()+ "offset "+tz.getOffset(Settings.getTimerDate().getTime()));
-			
-			
-			if(daysLeft>1)
-				timeDrawer = String.format("%02d Days %02d:%02d:%02d",daysLeft, hoursLeft, minsLeft, secondsLeft);
-			else if(daysLeft == 1)
-				timeDrawer = String.format("%02d Day %02d:%02d:%02d",daysLeft, hoursLeft, minsLeft, secondsLeft);
-			else	
-				timeDrawer = String.format("%02d:%02d:%02d", hoursLeft, minsLeft, secondsLeft);
-			
+			timeDrawer = loc.getTimeLeft(false);
 		}
+		
+		//Calculate final CountDown
+		loc.calculateFinalCountDown();
 		
 		
 		// Finally Draw Time
-		gc.setEffect(new Glow(glow));
+		if(glow>0)
+			gc.setEffect(new Glow(glow));
 		gc.setFont(lableFont);
 		gc.setFill(lableColor);
 		gc.fillText(timeDrawer, this.updatePositionXtowindow((int) getXfromLongitude(loc.getLon())) + 6,
@@ -497,20 +421,61 @@ public class WTDrawer {
 		GraphicsContext gc = wtCanvas.getGraphicsContext2D();
 		// LableColor
 		
-		double fWidth, fHeigth, fX, fY;
-		fWidth = (this.aPane.getWidth()/30);
-		fHeigth = ((aPane.getHeight()/2)-(aPane.getHeight()/15));
-		fX = (this.aPane.getWidth()/5);
-		fY = this.aPane.getHeight()/2;
+		double fx, fy, fHeight, fWidth;
+		fx = (this.aPane.getWidth()/30);
+		fy = ((aPane.getHeight()/2)-(aPane.getHeight()/15));
+		fHeight = (this.aPane.getWidth()/5);
+		fWidth = this.aPane.getHeight()/2;
 		
-		gc.setEffect(new Glow(glow));
+		if(glow>0)
+			gc.setEffect(new Glow(glow));
 		Color cF = Color.web(Settings.getLableColor(), 0.9);
 		Color cB = Color.web(Settings.getLableColor(), 0.1);
 		gc.setFill(cB);
 		gc.setStroke(cF);
-		gc.strokeRect(fWidth, fHeigth ,fX , fY);
-		gc.fillRect(fWidth, fHeigth ,fX , fY);
+		gc.strokeRect(fx, fy ,fHeight , fWidth);
+		gc.fillRect(fx, fy ,fHeight , fWidth);
 		gc.setEffect(null);
+		
+		drawInfoLines(fHeight, fWidth, fx, fy);
+		
+	}
+	
+	private void drawInfoLines(double width, double height, double posX, double posY){
+		GraphicsContext gc = wtCanvas.getGraphicsContext2D();
+		
+		
+		double pos = posY;
+		
+		//remove deactivated messages (priority < 0)
+		for (int i = 0; i < Settings.getMessageBox().size(); i++) {
+			if(Settings.getMessageBox().get(i).getPriority()<0){
+				Settings.getMessageBox().remove(i);
+			}
+		}
+		
+		//Load msg lines:
+				for(Message msg: Settings.getMessageBox()){
+					String msgText = msg.getMessage();
+					double textWidth = (msg.getFontSize()*msgText.length())*0.60;
+					while((textWidth+10)>width){
+						msgText = msgText.substring(0, msgText.length()-1);
+						textWidth = (msg.getFontSize()*msgText.length())*0.60;
+						
+					}
+					
+					pos=pos+(1.5*msg.getFontSize());
+					Color cF = Color.web(msg.getColor(), 0.9);
+					gc.setFill(cF);
+					Font theFont = Font.font("Lucida Sans Unicode", FontWeight.NORMAL, msg.getFontSize());
+					gc.setFont(theFont);
+					gc.fillText(msgText, (posX+10), pos);
+											//System.out.println(width+" .... "+msg.getMessage().length()+"....."+textWidth);
+				}
+			if((pos-posY+10)>height){
+				Settings.getMessageBox().remove(0);
+			}
+
 	}
 
 }
